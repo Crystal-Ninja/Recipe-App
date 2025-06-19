@@ -2,11 +2,13 @@ import express, { response } from "express"
 import { ENV } from "./config/env.js";
 import {db} from "./config/db.js"
 import { favoriteTable } from "./db/schema.js";
+import job from "./config/cron.js";
 
 import { and,eq } from "drizzle-orm";
 const app=express()
 const PORT = ENV.PORT || 8001;
 
+if(ENV.NODE_ENV==="production") job.start()
 app.use(express.json())
 app.get("/api/health",async (req,res) => {
     res.status(200).json({success:true})    
